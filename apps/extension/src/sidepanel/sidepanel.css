@@ -1,0 +1,66 @@
+:root {
+  --bg: #fafaf9;
+  --fg: #1c1917;
+  --muted: #78716c;
+  --line: #e7e5e4;
+  --accent: #dc2626;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1917;
+    --fg: #f5f5f4;
+    --muted: #a8a29e;
+    --line: #44403c;
+    --accent: #f87171;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+button, input, textarea { font: inherit; color: inherit; }
+button {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+button.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+input, textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+textarea { min-height: 10rem; resize: vertical; }
+.panel { display: flex; flex-direction: column; gap: 0.75rem; padding: 0.75rem; }
+.panel .sr-reader { padding: 0; background: transparent; }
+.panel .sr-controls button { padding: 0.4rem 0.55rem; }
+.tabs { display: flex; gap: 0.25rem; }
+.tabs button.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.import, .import form, .account { display: flex; flex-direction: column; gap: 0.5rem; }
+.drop {
+  display: block;
+  border: 2px dashed var(--line);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
+  cursor: pointer;
+}
+.drop input { display: none; }
+.continue { text-align: left; }
+.hint { color: var(--muted); font-size: 0.85rem; margin: 0; }
+.error { color: var(--accent); margin: 0; }
+.reader-bar { display: flex; gap: 0.5rem; align-items: center; }
+.saved { margin-left: auto; color: var(--muted); font-size: 0.8rem; }
+.library { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.library button { width: 100%; text-align: left; display: flex; flex-direction: column; }
+.library span { color: var(--muted); font-size: 0.8rem; }

@@ -1,0 +1,21 @@
+{
+  "name": "speed-read-it",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w @speedread/web",
+    "dev:extension": "npm run dev -w @speedread/extension",
+    "build": "npm run build -w @speedread/web && npm run build -w @speedread/extension",
+    "build:web": "npm run build -w @speedread/web",
+    "build:extension": "npm run build -w @speedread/extension",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.9"
+  }
+}

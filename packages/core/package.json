@@ -1,0 +1,29 @@
+{
+  "name": "@speedread/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ingest": "./src/ingest/index.ts",
+    "./data": "./src/data/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "jszip": "^3.10.2",
+    "mammoth": "^1.13.0",
+    "pdfjs-dist": "^6.4.299"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.117.0"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.117.3",
+    "@types/node": "^22",
+    "typescript": "^5",
+    "vitest": "^5.0.3"
+  }
+}
