@@ -23,7 +23,7 @@ export async function safeFetch(rawUrl: string): Promise<{ url: string; contentT
     const res = await fetch(url, {
       redirect: "manual",
       signal: AbortSignal.timeout(TIMEOUT_MS),
-      headers: { "user-agent": "SpeedReadIt/1.0 (+reader import)", accept: "text/html,text/plain;q=0.9" },
+      headers: { "user-agent": "ReadButler/1.0 (+reader import)", accept: "text/html,text/plain;q=0.9" },
     });
 
     if (res.status >= 300 && res.status < 400) {

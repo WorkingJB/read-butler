@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@speedread/reader-ui/reader.css";
+import "@readbutler/reader-ui/reader.css";
 import "./sidepanel.css";
 import { App } from "./App";
 

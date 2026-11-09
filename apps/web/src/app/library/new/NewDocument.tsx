@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createDocument } from "@speedread/core/data";
+import { createDocument } from "@readbutler/core/data";
 import { Importer } from "@/components/Importer";
 import { createClient } from "@/lib/supabase/client";
 

@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import type { Database } from "@speedread/core/data";
+import type { Database } from "@readbutler/core/data";
 import { supabaseConfigured, supabaseKey, supabaseUrl } from "@/lib/env";
 
 const PROTECTED = ["/library", "/read", "/stats"];

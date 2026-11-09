@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { listDocuments } from "@speedread/core/data";
+import { listDocuments } from "@readbutler/core/data";
 import { requireUser } from "@/lib/supabase/server";
 import { deleteDocumentAction } from "./actions";
 
-export const metadata = { title: "Library · Speed Read It" };
+export const metadata = { title: "Library · Read Butler" };
 
 export default async function LibraryPage() {
   const { supabase } = await requireUser();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listDocuments, type LibraryItem } from "@speedread/core/data";
+import { listDocuments, type LibraryItem } from "@readbutler/core/data";
 import { supabase, webAppUrl } from "../supabase";
 
 export function Library({ onOpen }: { onOpen: (id: string) => void }) {

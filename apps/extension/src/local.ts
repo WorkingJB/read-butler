@@ -1,4 +1,4 @@
-import type { ExtractedDocument } from "@speedread/core/ingest";
+import type { ExtractedDocument } from "@readbutler/core/ingest";
 
 /**
  * Signed-out readers keep their current document and position on the device,

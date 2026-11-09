@@ -1,8 +1,8 @@
-import { getDailyStats, getProfile } from "@speedread/core/data";
+import { getDailyStats, getProfile } from "@readbutler/core/data";
 import { requireUser } from "@/lib/supabase/server";
 import { saveSettings } from "./actions";
 
-export const metadata = { title: "Progress · Speed Read It" };
+export const metadata = { title: "Progress · Read Butler" };
 
 export default async function StatsPage() {
   const { supabase } = await requireUser();

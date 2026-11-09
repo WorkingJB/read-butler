@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { ExtractedDocument } from "@speedread/core/ingest";
-import { RsvpReader } from "@speedread/reader-ui";
+import type { ExtractedDocument } from "@readbutler/core/ingest";
+import { RsvpReader } from "@readbutler/reader-ui";
 import { Importer } from "@/components/Importer";
 
 export function TryReader() {

@@ -1,6 +1,6 @@
 import { TryReader } from "./TryReader";
 
-export const metadata = { title: "Try it · Speed Read It" };
+export const metadata = { title: "Try it · Read Butler" };
 
 export default function TryPage() {
   return (

@@ -2,9 +2,9 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { suggestNextTarget, type RampSettings, type Section } from "@speedread/core";
-import { rateSession, saveProgress, saveSession, updateProfile } from "@speedread/core/data";
-import { checkpointToSession, RsvpReader, type Checkpoint } from "@speedread/reader-ui";
+import { suggestNextTarget, type RampSettings, type Section } from "@readbutler/core";
+import { rateSession, saveProgress, saveSession, updateProfile } from "@readbutler/core/data";
+import { checkpointToSession, RsvpReader, type Checkpoint } from "@readbutler/reader-ui";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {

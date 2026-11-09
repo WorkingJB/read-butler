@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { delayMs, wpmAt, type RampSettings, type TimingOptions, type Token, MAX_WPM, MIN_WPM } from "@speedread/core";
+import { delayMs, wpmAt, type RampSettings, type TimingOptions, type Token, MAX_WPM, MIN_WPM } from "@readbutler/core";
 
 export interface SessionSummary {
   /** Client-generated id, so repeated checkpoints upsert one row. */

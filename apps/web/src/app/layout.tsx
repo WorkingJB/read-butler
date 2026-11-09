@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { NavAuth } from "@/components/NavAuth";
-import "@speedread/reader-ui/reader.css";
+import "@readbutler/reader-ui/reader.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Speed Read It",
+  title: "Read Butler",
   description: "Paste or upload any text and speed read it one word at a time.",
 };
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <header className="border-b border-line">
           <nav className="mx-auto flex max-w-5xl items-center gap-6 px-4 py-3 text-sm">
             <Link href="/" className="font-semibold">
-              Speed Read It
+              Read Butler
             </Link>
             <Link href="/try" className="text-muted hover:text-foreground">
               Try it

@@ -1,5 +1,5 @@
 {
-  "name": "@speedread/web",
+  "name": "@readbutler/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
-    "@speedread/core": "*",
-    "@speedread/reader-ui": "*",
+    "@readbutler/core": "*",
+    "@readbutler/reader-ui": "*",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "linkedom": "^0.18.0",

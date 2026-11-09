@@ -2,7 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import type { Database } from "@speedread/core/data";
+import type { Database } from "@readbutler/core/data";
 import { supabaseKey, supabaseUrl } from "@/lib/env";
 
 /** Create one per request; never share a server client between requests. */

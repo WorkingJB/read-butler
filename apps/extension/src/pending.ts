@@ -1,4 +1,4 @@
-import { fromPlainText, type ExtractedDocument } from "@speedread/core/ingest";
+import { fromPlainText, type ExtractedDocument } from "@readbutler/core/ingest";
 import { PENDING_KEY, type PendingText } from "./messages";
 
 export { PENDING_KEY };

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { Readability } from "@mozilla/readability";
 import { parseHTML } from "linkedom";
-import { assembleChapters, htmlToText, type ExtractedDocument } from "@speedread/core/ingest";
+import { assembleChapters, htmlToText, type ExtractedDocument } from "@readbutler/core/ingest";
 import { createClient } from "@/lib/supabase/server";
 import { FetchRejected, safeFetch } from "@/lib/safe-fetch";
 

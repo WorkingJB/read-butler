@@ -1,4 +1,4 @@
--- Speed Read It: initial schema.
+-- Read Butler: initial schema.
 -- Every table is owned per user and protected by row level security, so both
 -- the web app and the Chrome extension talk to Supabase directly with the
 -- user's JWT. No service-role key is used anywhere in the clients.

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { MAX_BODY_CHARS } from "@speedread/core";
-import { ACCEPTED_FILE_TYPES, extractFile, fromPlainText, type ExtractedDocument } from "@speedread/core/ingest";
+import { MAX_BODY_CHARS } from "@readbutler/core";
+import { ACCEPTED_FILE_TYPES, extractFile, fromPlainText, type ExtractedDocument } from "@readbutler/core/ingest";
 import pdfWorkerUrl from "pdfjs-dist/legacy/build/pdf.worker.min.mjs?url";
 
 export function Import({ onImported }: { onImported: (doc: ExtractedDocument) => void }) {

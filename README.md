@@ -1,4 +1,4 @@
-# Speed Read It
+# Read Butler
 
 A free speed reader. Paste text or upload a PDF, EPUB, DOCX, TXT, Markdown or HTML file and read it one word at a time (RSVP), with a warm-up ramp and a target speed that adapts to how much you take in. Works on the web and as a Chrome extension side panel, with one synced library.
 
@@ -10,7 +10,7 @@ A free speed reader. Paste text or upload a PDF, EPUB, DOCX, TXT, Markdown or HT
 - **Web:** Next.js 16 (App Router) on Vercel, Tailwind CSS 4
 - **Extension:** Chrome Manifest V3 side panel, Vite + React
 - **Backend:** Supabase (Auth with email codes, Postgres with row level security)
-- **Shared packages:** `@speedread/core` (reader engine, file parsing, data access) and `@speedread/reader-ui` (React reader)
+- **Shared packages:** `@readbutler/core` (reader engine, file parsing, data access) and `@readbutler/reader-ui` (React reader)
 
 ## Getting started
 

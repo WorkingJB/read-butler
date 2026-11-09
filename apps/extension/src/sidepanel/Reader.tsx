@@ -1,7 +1,7 @@
-import { suggestNextTarget, type RampSettings } from "@speedread/core";
-import type { ExtractedDocument } from "@speedread/core/ingest";
-import { rateSession, saveProgress, saveSession, updateProfile } from "@speedread/core/data";
-import { checkpointToSession, RsvpReader, type Checkpoint } from "@speedread/reader-ui";
+import { suggestNextTarget, type RampSettings } from "@readbutler/core";
+import type { ExtractedDocument } from "@readbutler/core/ingest";
+import { rateSession, saveProgress, saveSession, updateProfile } from "@readbutler/core/data";
+import { checkpointToSession, RsvpReader, type Checkpoint } from "@readbutler/reader-ui";
 import { saveLocal } from "../local";
 import { supabase } from "../supabase";
 

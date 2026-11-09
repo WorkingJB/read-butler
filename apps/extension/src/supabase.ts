@@ -1,5 +1,5 @@
 import { createClient, type SupportedStorage } from "@supabase/supabase-js";
-import type { Database } from "@speedread/core/data";
+import type { Database } from "@readbutler/core/data";
 
 export const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? "";
 const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "";

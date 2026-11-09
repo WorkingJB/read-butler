@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { DEFAULT_RAMP } from "@speedread/core";
-import { getDocument, getProfile, rampFromProfile } from "@speedread/core/data";
+import { DEFAULT_RAMP } from "@readbutler/core";
+import { getDocument, getProfile, rampFromProfile } from "@readbutler/core/data";
 import { requireUser } from "@/lib/supabase/server";
 import { ReaderScreen } from "./ReaderScreen";
 

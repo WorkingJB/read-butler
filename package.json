@@ -1,16 +1,16 @@
 {
-  "name": "speed-read-it",
+  "name": "read-butler",
   "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev -w @speedread/web",
-    "dev:extension": "npm run dev -w @speedread/extension",
-    "build": "npm run build -w @speedread/web && npm run build -w @speedread/extension",
-    "build:web": "npm run build -w @speedread/web",
-    "build:extension": "npm run build -w @speedread/extension",
+    "dev:web": "npm run dev -w @readbutler/web",
+    "dev:extension": "npm run dev -w @readbutler/extension",
+    "build": "npm run build -w @readbutler/web && npm run build -w @readbutler/extension",
+    "build:web": "npm run build -w @readbutler/web",
+    "build:extension": "npm run build -w @readbutler/extension",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"

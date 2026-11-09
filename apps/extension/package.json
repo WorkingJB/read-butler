@@ -1,5 +1,5 @@
 {
-  "name": "@speedread/extension",
+  "name": "@readbutler/extension",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,8 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@speedread/core": "*",
-    "@speedread/reader-ui": "*",
+    "@readbutler/core": "*",
+    "@readbutler/reader-ui": "*",
     "@supabase/supabase-js": "^2.117.3",
     "pdfjs-dist": "^6.4.299",
     "react": "19.3.0",

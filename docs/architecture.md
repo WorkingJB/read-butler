@@ -1,6 +1,6 @@
 # Architecture
 
-Speed Read It is a free RSVP speed reader with two clients, a Next.js web app on Vercel and a Chrome extension, sharing one Supabase backend for auth and data.
+Read Butler is a free RSVP speed reader with two clients, a Next.js web app on Vercel and a Chrome extension, sharing one Supabase backend for auth and data.
 
 ## Overview
 

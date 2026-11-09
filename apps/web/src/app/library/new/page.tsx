@@ -1,6 +1,6 @@
 import { NewDocument } from "./NewDocument";
 
-export const metadata = { title: "Add text · Speed Read It" };
+export const metadata = { title: "Add text · Read Butler" };
 
 export default function NewDocumentPage() {
   return (

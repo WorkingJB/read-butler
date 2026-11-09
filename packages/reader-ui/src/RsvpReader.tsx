@@ -10,7 +10,7 @@ import {
   type RampSettings,
   type Section,
   type TimingOptions,
-} from "@speedread/core";
+} from "@readbutler/core";
 import { useRsvp, type Checkpoint } from "./useRsvp";
 
 export interface RsvpReaderProps {

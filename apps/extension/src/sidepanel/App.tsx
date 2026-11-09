@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { DEFAULT_RAMP, type RampSettings } from "@speedread/core";
-import type { ExtractedDocument } from "@speedread/core/ingest";
-import { createDocument, getDocument, getProfile, rampFromProfile } from "@speedread/core/data";
+import { DEFAULT_RAMP, type RampSettings } from "@readbutler/core";
+import type { ExtractedDocument } from "@readbutler/core/ingest";
+import { createDocument, getDocument, getProfile, rampFromProfile } from "@readbutler/core/data";
 import { PENDING_KEY, takePending } from "../pending";
 import { loadLocal, type LocalDocument } from "../local";
 import { supabase, supabaseConfigured } from "../supabase";

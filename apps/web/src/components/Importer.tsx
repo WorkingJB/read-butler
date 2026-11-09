@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ACCEPTED_FILE_TYPES, extractFile, fromPlainText, type ExtractedDocument } from "@speedread/core/ingest";
-import { MAX_BODY_CHARS } from "@speedread/core";
+import { ACCEPTED_FILE_TYPES, extractFile, fromPlainText, type ExtractedDocument } from "@readbutler/core/ingest";
+import { MAX_BODY_CHARS } from "@readbutler/core";
 import { PDF_WORKER_SRC } from "@/lib/env";
 
 type Tab = "paste" | "file" | "url";
