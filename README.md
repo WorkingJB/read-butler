@@ -14,21 +14,19 @@ A free speed reader. Paste text or upload a PDF, EPUB, DOCX, TXT, Markdown or HT
 
 ## Getting started
 
+Development is cloud-first: nothing runs locally except the extension build.
+
+- **Web app:** open a PR. CI runs lint, typecheck and tests, and Vercel builds a preview deployment. Merging to `main` deploys to production at https://www.readbutler.com.
+- **Database and auth:** add a migration under `supabase/migrations/` or change `supabase/config.toml`. PRs get a dry run, and merging to `main` applies both to the hosted project via GitHub Actions. Don't run `supabase config push` locally: the SMTP password comes from a CI secret.
+- **Chrome extension:**
+
 ```bash
 npm install
-
-# Web app
-cp apps/web/.env.example apps/web/.env.local   # add Supabase URL and publishable key
-npm run dev:web                                  # http://localhost:3000
-
-# Chrome extension
-cp apps/extension/.env.example apps/extension/.env
-npm run build:extension                          # load apps/extension/dist as an unpacked extension
+cp apps/extension/.env.example apps/extension/.env.local   # Supabase URL, publishable key, web app URL
+npm run build:extension                                     # load apps/extension/dist as an unpacked extension
 ```
 
 The `/try` page and the signed-out extension work without Supabase configured.
-
-Apply the database schema with `npx supabase db push` (after `npx supabase link`), or paste `supabase/migrations/*.sql` into the Supabase SQL editor. See the setup section of the architecture doc for auth email templates and redirect URLs.
 
 ## Scripts
 

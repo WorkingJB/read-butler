@@ -137,21 +137,21 @@ Rough capacity: an average book is 400 to 600 KB of text, so 500 MB holds on the
 
 ### 1. Supabase
 
-1. Create a project.
-2. Apply the schema: `npx supabase link --project-ref <ref>` then `npx supabase db push`. Alternatively, paste the migration into the SQL editor.
-3. Authentication > Sign In / Providers: enable Email. Under Authentication > Emails, edit the **Magic Link** and **Confirm signup** templates to include the code, for example `Your code is {{ .Token }}`, alongside the link.
-4. Authentication > URL Configuration: set Site URL to the production domain and add redirect URLs for `http://localhost:3000/**` and Vercel previews, for example `https://*-<team>.vercel.app/**`.
-5. Before launch: custom SMTP and rate limits.
+Hosted project `owtsriyiyhhsmwizcvfy`. The repo is the source of truth:
+
+- `supabase/migrations/` holds the schema. `supabase/config.toml` holds auth settings: Site URL `https://www.readbutler.com`, redirect allow-list for production and Vercel previews (`https://read-butler-*-palouse.vercel.app/**`), email OTP, Resend SMTP, and the email templates in `supabase/templates/` (they must include `{{ .Token }}`, since the extension signs in with the code only).
+- `.github/workflows/supabase.yml` dry-runs migrations on PRs and, on merge to `main`, runs `supabase db push` and `supabase config push`. Repo secrets: `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `RESEND_API_KEY`.
+- Email goes through Resend from `noreply@readbutler.com`. The domain's DKIM and `send.` subdomain records live in Namecheap DNS.
 
 ### 2. Web app on Vercel
 
-1. Import the GitHub repo in Vercel and set **Root Directory** to `apps/web`. Vercel installs the npm workspaces from the repo root.
-2. Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_URL`.
-3. Deploy. Every PR gets a preview deployment.
+1. Project `palouse/read-butler`, connected to the GitHub repo with **Root Directory** `apps/web`. Vercel installs the npm workspaces from the repo root.
+2. Environment variables: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Production gets them from the Supabase integration; Preview has manual copies. Previews share the production database.
+3. Every PR gets a preview deployment; `main` deploys to production. `readbutler.com` redirects to `www.readbutler.com`.
 
 ### 3. Chrome extension
 
-1. `cp apps/extension/.env.example apps/extension/.env` and fill in the same Supabase values plus `VITE_WEB_APP_URL`.
+1. `cp apps/extension/.env.example apps/extension/.env.local` and fill in the same Supabase values plus `VITE_WEB_APP_URL`.
 2. `npm run build:extension`, then load `apps/extension/dist` via chrome://extensions with Developer mode on, using "Load unpacked".
 3. To publish, zip `dist/` and upload it to the Chrome Web Store dashboard.
 
