@@ -6,14 +6,17 @@
   "exports": {
     ".": "./src/index.ts",
     "./ingest": "./src/ingest/index.ts",
-    "./data": "./src/data/index.ts"
+    "./data": "./src/data/index.ts",
+    "./article": "./src/ingest/article.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
+    "@mozilla/readability": "^0.6.0",
     "jszip": "^3.10.2",
+    "linkedom": "^0.18.0",
     "mammoth": "^1.13.0",
     "pdfjs-dist": "^6.4.299"
   },

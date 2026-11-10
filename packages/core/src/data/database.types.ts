@@ -39,6 +39,8 @@ export interface Database {
           source_type: DocumentSource;
           source_name: string | null;
           word_count: number;
+          author: string | null;
+          site_name: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -123,6 +125,8 @@ export interface Database {
           p_body: string;
           p_source_name?: string | null;
           p_sections?: Json;
+          p_author?: string | null;
+          p_site_name?: string | null;
         };
         Returns: Database["public"]["Tables"]["documents"]["Row"];
       };

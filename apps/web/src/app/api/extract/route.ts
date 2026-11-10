@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { Readability } from "@mozilla/readability";
-import { parseHTML } from "linkedom";
-import { assembleChapters, htmlToText, type ExtractedDocument } from "@readbutler/core/ingest";
+import { assembleChapters, type ExtractedDocument } from "@readbutler/core/ingest";
+import { extractArticle } from "@readbutler/core/article";
 import { createClient } from "@/lib/supabase/server";
 import { FetchRejected, safeFetch } from "@/lib/safe-fetch";
 
@@ -22,24 +21,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const page = await safeFetch(url);
-    const doc = page.contentType.includes("text/plain") ? fromText(page.body, page.url) : fromHtml(page.body, page.url);
+    const doc = page.contentType.includes("text/plain")
+      ? fromText(page.body, page.url)
+      : extractArticle({ html: page.body, url: page.url });
     if (!doc.text) return NextResponse.json({ error: "No readable text found on that page." }, { status: 422 });
     return NextResponse.json(doc);
   } catch (e) {
     const message = e instanceof FetchRejected ? e.message : "Could not fetch that page.";
     return NextResponse.json({ error: message }, { status: 422 });
   }
-}
-
-function fromHtml(html: string, url: string): ExtractedDocument {
-  const { document } = parseHTML(html);
-  const article = new Readability(document as unknown as Document).parse();
-  const source = article?.content
-    ? parseHTML(`<!doctype html><html><body>${article.content}</body></html>`).document.body
-    : document.body;
-  const { text, sections } = assembleChapters([{ text: htmlToText(source as unknown as Node) }]);
-  const title = article?.title?.trim() || document.title?.trim() || new URL(url).hostname;
-  return { title: title.slice(0, 300), text, sections, sourceType: "url", sourceName: url };
 }
 
 function fromText(body: string, url: string): ExtractedDocument {

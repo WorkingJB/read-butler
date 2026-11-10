@@ -41,7 +41,7 @@ flowchart LR
 | **Tokenize on the client, by whitespace.** The `create_document` SQL function counts words with the same rule. | Saved positions are plain word indexes that mean the same thing in every client. |
 | **Email one-time code sign-in.** | Works identically in the web app and the extension, which cannot easily receive magic-link redirects. The emailed link also works on the web via `/auth/callback`. |
 | **npm workspaces monorepo.** | The reader engine, parsers, React reader component and data layer are written once. |
-| **Web page import runs server-side** (`/api/extract`, Readability + linkedom). | Browsers cannot fetch most sites cross-origin. The route is sign-in only and SSRF-guarded. The extension does not need it: it reads the open tab directly. |
+| **Web page import runs server-side** (`/api/extract`, shared `extractArticle`). | Browsers cannot fetch most sites cross-origin. The route is sign-in only and SSRF-guarded. The extension does not need it: it extracts from the open tab, which also covers signed-in and paywalled pages. |
 
 ## Repository layout
 
@@ -110,8 +110,10 @@ The reader emits a checkpoint on pause, on finish, every 10 seconds while playin
 - **Manifest V3.** Permissions: `sidePanel`, `storage`, `contextMenus`, `activeTab`, `scripting`. No host permissions: page access comes from `activeTab` only after the user clicks the context menu.
 - **Entry points.**
   - The toolbar icon or Alt+Shift+R opens the side panel.
-  - Right-click menu: "Speed read selection" and "Speed read this page".
-- **Hand-off.** The service worker opens the side panel inside the user gesture, grabs the selection or main page text with `chrome.scripting.executeScript`, and passes it through `chrome.storage.session`. The worker bundle is about 1 KB and contains no parsing code.
+  - Right-click menu: "Speed read selection", "Speed read this page" and "Save page to Read Butler". Alt+Shift+S also saves the page.
+  - Side panel buttons: "Read this page" and "Save this page" (these work when Chrome has granted activeTab, e.g. after opening the panel from the toolbar; otherwise the error points to the right-click menu).
+- **Page extraction.** The service worker opens the side panel inside the user gesture, snapshots the tab's rendered HTML with `chrome.scripting.executeScript`, and runs `extractArticle` from `@readbutler/core/article` (linkedom + Readability, plus clean-up for citation markers, edit links, navboxes, infoboxes and back matter like References). The web app's `/api/extract` uses the same function. The result goes to the panel through `chrome.storage.session`.
+- **Saving pages.** Pages are saved under their canonical URL (same-site `rel=canonical`, no fragment or tracking parameters). `saveDocument` returns the existing row when that URL is already in the library, so saving twice never duplicates. Author and site name are stored on `documents`.
 - **Signed out:** fully usable. The current document and position are kept locally so closing the panel does not lose your place.
 - **Signed in:** "Save to library" stores the document in Supabase. Progress then syncs and the library tab lists everything saved from either client.
 - **pdf.js** uses its legacy build in both clients. The modern v6 build calls `Map.prototype.getOrInsertComputed`, which current Chromium does not ship.
