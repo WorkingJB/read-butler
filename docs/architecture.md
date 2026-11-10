@@ -42,6 +42,8 @@ flowchart LR
 | **Email one-time code sign-in.** | Works identically in the web app and the extension, which cannot easily receive magic-link redirects. The emailed link also works on the web via `/auth/callback`. |
 | **npm workspaces monorepo.** | The reader engine, parsers, React reader component and data layer are written once. |
 | **Web page import runs server-side** (`/api/extract`, shared `extractArticle`). | Browsers cannot fetch most sites cross-origin. The route is sign-in only and SSRF-guarded. The extension does not need it: it extracts from the open tab, which also covers signed-in and paywalled pages. |
+| **Free books come from Project Gutenberg** (`/api/books/search` via Gutendex, `/api/books/[id]` for the EPUB). | Public domain and free. Neither host sends CORS headers, so both are proxied; the download host is fixed and the id numeric. The browser parses the image-free EPUB like an upload, so books never touch the database as files. Kindle and Libby offer no content API and are DRM-protected, so they're out of scope. |
+| **EPUB parsing follows the book's own table of contents** (`ingest/epub.ts`). | Chapter names come from the EPUB 3 nav or EPUB 2 NCX, and files holding several chapters are split at the TOC anchors. Non-linear items, footnotes, printed contents lists and Gutenberg licence text are dropped. DRM-protected EPUBs get a clear error (font obfuscation is allowed). |
 
 ## Repository layout
 

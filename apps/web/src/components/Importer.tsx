@@ -4,8 +4,29 @@ import { useState } from "react";
 import { ACCEPTED_FILE_TYPES, extractFile, fromPlainText, type ExtractedDocument } from "@readbutler/core/ingest";
 import { MAX_BODY_CHARS } from "@readbutler/core";
 import { PDF_WORKER_SRC } from "@/lib/env";
+import { gutenbergUrl, type GutenbergBook } from "@/lib/books";
+import { BookSearch } from "./BookSearch";
 
-type Tab = "paste" | "file" | "url";
+type Tab = "paste" | "file" | "url" | "books";
+
+const TAB_LABELS: Record<Tab, string> = { paste: "Paste text", file: "Upload file", url: "Web page", books: "Free books" };
+
+/** Downloads a Gutenberg EPUB through our proxy and parses it here like an upload. */
+async function importGutenberg(book: GutenbergBook): Promise<ExtractedDocument> {
+  const res = await fetch(`/api/books/${book.id}`);
+  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? "Couldn't download that book.");
+  const file = new File([await res.blob()], `pg${book.id}.epub`, { type: "application/epub+zip" });
+  const doc = await extractFile(file, { workerSrc: PDF_WORKER_SRC });
+  return {
+    ...doc,
+    title: doc.title || book.title,
+    author: doc.author ?? book.authors[0],
+    // Saved under the book's Gutenberg page, so adding it twice opens the existing copy.
+    sourceType: "url",
+    sourceName: gutenbergUrl(book.id),
+    siteName: "Project Gutenberg",
+  };
+}
 
 export function Importer({
   onImported,
@@ -38,11 +59,11 @@ export function Importer({
     }
   }
 
-  const tabs: Tab[] = allowUrl ? ["paste", "file", "url"] : ["paste", "file"];
+  const tabs: Tab[] = allowUrl ? ["paste", "file", "url", "books"] : ["paste", "file"];
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2" role="tablist">
+      <div className="flex flex-wrap gap-2" role="tablist">
         {tabs.map((t) => (
           <button
             key={t}
@@ -51,7 +72,7 @@ export function Importer({
             className={tab === t ? "btn btn-primary" : "btn"}
             onClick={() => setTab(t)}
           >
-            {t === "paste" ? "Paste text" : t === "file" ? "Upload file" : "Web page"}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
@@ -126,6 +147,8 @@ export function Importer({
           </button>
         </form>
       )}
+
+      {tab === "books" && <BookSearch busy={busy} onAdd={(book) => run(() => importGutenberg(book))} />}
 
       {error && <p className="text-sm text-accent">{error}</p>}
     </div>
