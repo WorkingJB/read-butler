@@ -26,6 +26,7 @@ export function Library({ onOpen }: { onOpen: (id: string) => void }) {
               <button onClick={() => onOpen(d.id)}>
                 <strong>{d.title}</strong>
                 <span>
+                  {d.site_name && `${d.site_name} · `}
                   {d.word_count.toLocaleString()} words · {d.progress?.completed_at ? "finished" : `${pct}%`}
                 </span>
               </button>

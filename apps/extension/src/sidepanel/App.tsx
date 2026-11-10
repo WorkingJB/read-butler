@@ -2,8 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { DEFAULT_RAMP, type RampSettings } from "@readbutler/core";
 import type { ExtractedDocument } from "@readbutler/core/ingest";
-import { createDocument, getDocument, getProfile, rampFromProfile } from "@readbutler/core/data";
-import { PENDING_KEY, takePending } from "../pending";
+import { getDocument, getProfile, rampFromProfile, saveDocument } from "@readbutler/core/data";
+import type { Pending } from "../messages";
+import { extractFromTab } from "../page";
+import { PENDING_KEY, selectionDocument, takePending } from "../pending";
 import { loadLocal, type LocalDocument } from "../local";
 import { supabase, supabaseConfigured } from "../supabase";
 import { Account } from "./Account";
@@ -20,8 +22,16 @@ export function App() {
   const [open, setOpen] = useState<OpenDocument | null>(null);
   const [local, setLocal] = useState<LocalDocument | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  // Bumped to remount the library so it shows a page that was just saved.
+  const [libraryKey, setLibraryKey] = useState(0);
 
   const signedIn = Boolean(session);
+  const go = (next: View) => {
+    setView(next);
+    setNotice(null);
+  };
 
   useEffect(() => {
     if (!supabaseConfigured) return;
@@ -46,26 +56,70 @@ export function App() {
     setOpen({ doc, documentId: null, initialIndex: index, key: Date.now() });
   }, []);
 
-  // Text sent from the context menu, both on first open and while the panel is open.
+  const savePage = useCallback(async (doc: ExtractedDocument) => {
+    const { row, existed } = await saveDocument(supabase, doc);
+    setOpen(null);
+    setView("library");
+    setLibraryKey((k) => k + 1);
+    setNotice(existed ? `“${row.title}” is already in your library.` : `Saved “${row.title}” to your library.`);
+  }, []);
+
+  const handlePending = useCallback(
+    async (p: Pending) => {
+      setError(null);
+      setNotice(null);
+      if (p.kind === "error") return setError(p.message);
+      if (p.kind === "text") return openExtracted(selectionDocument(p));
+      if (!p.save) return openExtracted(p.doc);
+      // Check directly: the session state may not have loaded yet when the panel just opened.
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        setView("account");
+        return setNotice("Sign in to save pages to your library.");
+      }
+      await savePage(p.doc).catch((e: unknown) => setError(e instanceof Error ? e.message : String(e)));
+    },
+    [openExtracted, savePage],
+  );
+
+  // Work sent from the context menu or shortcut, both on first open and while the panel is open.
   useEffect(() => {
-    takePending().then((doc) => {
-      if (doc) openExtracted(doc);
+    takePending().then((p) => {
+      if (p) handlePending(p);
       else loadLocal().then(setLocal);
     });
     const onChange = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
       if (area === "session" && changes[PENDING_KEY]?.newValue) {
-        takePending().then((doc) => doc && openExtracted(doc));
+        takePending().then((p) => p && handlePending(p));
       }
     };
     chrome.storage.onChanged.addListener(onChange);
     return () => chrome.storage.onChanged.removeListener(onChange);
-  }, [openExtracted]);
+  }, [handlePending]);
+
+  /** The panel's own "Read this page" / "Save this page" buttons, for the active tab. */
+  async function fromCurrentPage(save: boolean) {
+    setError(null);
+    setNotice(null);
+    setBusy(true);
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) throw new Error("No page is open.");
+      const doc = await extractFromTab(tab.id);
+      if (save) await savePage(doc);
+      else openExtracted(doc);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function saveToLibrary() {
     if (!open || open.documentId) return;
     setError(null);
     try {
-      const row = await createDocument(supabase, open.doc);
+      const { row } = await saveDocument(supabase, open.doc);
       setOpen({ ...open, documentId: row.id });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -108,23 +162,34 @@ export function App() {
   return (
     <div className="panel">
       <nav className="tabs">
-        <button className={view === "import" ? "active" : ""} onClick={() => setView("import")}>
+        <button className={view === "import" ? "active" : ""} onClick={() => go("import")}>
           Read
         </button>
         {signedIn && (
-          <button className={view === "library" ? "active" : ""} onClick={() => setView("library")}>
+          <button className={view === "library" ? "active" : ""} onClick={() => go("library")}>
             Library
           </button>
         )}
-        <button className={view === "account" ? "active" : ""} onClick={() => setView("account")}>
+        <button className={view === "account" ? "active" : ""} onClick={() => go("account")}>
           {signedIn ? "Account" : "Sign in"}
         </button>
       </nav>
 
       {error && <p className="error">{error}</p>}
+      {notice && <p className="notice">{notice}</p>}
 
       {view === "import" && (
         <>
+          <div className="page-actions">
+            <button disabled={busy} onClick={() => fromCurrentPage(false)}>
+              Read this page
+            </button>
+            {signedIn && (
+              <button disabled={busy} onClick={() => fromCurrentPage(true)}>
+                {busy ? "Saving…" : "Save this page"}
+              </button>
+            )}
+          </div>
           {local && (
             <button className="continue" onClick={() => openExtracted(local.doc, local.index)}>
               Continue “{local.doc.title}”
@@ -133,7 +198,7 @@ export function App() {
           <Import onImported={(doc) => openExtracted(doc)} />
         </>
       )}
-      {view === "library" && signedIn && <Library onOpen={openFromLibrary} />}
+      {view === "library" && signedIn && <Library key={libraryKey} onOpen={openFromLibrary} />}
       {view === "account" && <Account session={session} />}
     </div>
   );

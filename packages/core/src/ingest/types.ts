@@ -9,6 +9,9 @@ export interface ExtractedDocument {
   sourceType: SourceType;
   /** File name or URL the text came from. */
   sourceName?: string;
+  author?: string;
+  /** Publication or website name, e.g. "Wikipedia". */
+  siteName?: string;
 }
 
 export class UnsupportedFileError extends Error {

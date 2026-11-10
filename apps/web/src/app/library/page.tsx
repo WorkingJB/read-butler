@@ -30,7 +30,7 @@ export default async function LibraryPage() {
                   <p className="truncate font-medium">{d.title}</p>
                   <p className="text-sm text-muted">
                     {d.word_count.toLocaleString()} words · {d.progress?.completed_at ? "finished" : `${read}% read`} ·{" "}
-                    {d.source_type}
+                    {d.site_name ?? d.source_type}
                   </p>
                 </Link>
                 <form action={deleteDocumentAction.bind(null, d.id)}>

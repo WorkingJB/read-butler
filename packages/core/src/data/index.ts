@@ -39,9 +39,32 @@ export async function createDocument(db: Client, doc: ExtractedDocument): Promis
     p_body: doc.text,
     p_source_name: doc.sourceName ?? null,
     p_sections: doc.sections as unknown as Database["public"]["Functions"]["create_document"]["Args"]["p_sections"],
+    // Omitted (undefined) rather than null when absent, so older databases without these params still accept the call.
+    p_author: doc.author,
+    p_site_name: doc.siteName,
   });
   if (error || !data) fail(error);
   return data;
+}
+
+/**
+ * Saves a document, unless it's a web page already in the library (matched by
+ * its canonical URL), in which case the existing row is returned instead.
+ */
+export async function saveDocument(db: Client, doc: ExtractedDocument): Promise<{ row: DocumentRow; existed: boolean }> {
+  if (doc.sourceType === "url" && doc.sourceName) {
+    const { data, error } = await db
+      .from("documents")
+      .select("*")
+      .eq("source_type", "url")
+      .eq("source_name", doc.sourceName)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) fail(error);
+    if (data) return { row: data, existed: true };
+  }
+  return { row: await createDocument(db, doc), existed: false };
 }
 
 export async function listDocuments(db: Client, limit = 100): Promise<LibraryItem[]> {
