@@ -1,6 +1,6 @@
 import { getDailyStats, getProfile } from "@readbutler/core/data";
 import { requireUser } from "@/lib/supabase/server";
-import { saveSettings } from "./actions";
+import { SettingsForm } from "./SettingsForm";
 
 export const metadata = { title: "Progress · Read Butler" };
 
@@ -43,17 +43,7 @@ export default async function StatsPage() {
             Each session starts at the warm-up speed and steps up to your target. Rate your comprehension at the end of
             a document and the target moves up or down by one step.
           </p>
-          <form action={saveSettings} className="grid max-w-xl gap-4 sm:grid-cols-2">
-            <Field label="Target speed (wpm)" name="target_wpm" defaultValue={profile.target_wpm} min={50} max={1500} />
-            <Field label="Warm-up start (wpm)" name="ramp_start_wpm" defaultValue={profile.ramp_start_wpm} min={50} max={1500} />
-            <Field label="Step size (wpm)" name="ramp_step_wpm" defaultValue={profile.ramp_step_wpm} min={5} max={200} />
-            <Field label="Words per step" name="ramp_step_words" defaultValue={profile.ramp_step_words} min={25} max={5000} />
-            <label className="flex items-center gap-2 text-sm sm:col-span-2">
-              <input type="checkbox" name="ramp_enabled" defaultChecked={profile.ramp_enabled} /> Warm up at the start of
-              each session
-            </label>
-            <button className="btn btn-primary w-fit">Save</button>
-          </form>
+          <SettingsForm profile={profile} />
         </section>
       )}
     </div>
@@ -66,14 +56,5 @@ function Stat({ label, value }: { label: string; value: string }) {
       <p className="text-sm text-muted">{label}</p>
       <p className="mt-1 text-2xl font-semibold tabular-nums">{value}</p>
     </div>
-  );
-}
-
-function Field(props: { label: string; name: string; defaultValue: number; min: number; max: number }) {
-  return (
-    <label className="space-y-1 text-sm">
-      <span>{props.label}</span>
-      <input className="input" type="number" name={props.name} defaultValue={props.defaultValue} min={props.min} max={props.max} required />
-    </label>
   );
 }

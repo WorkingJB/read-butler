@@ -4,10 +4,13 @@ import type { Database } from "@readbutler/core/data";
 import { supabaseConfigured, supabaseKey, supabaseUrl } from "@/lib/env";
 
 const PROTECTED = ["/library", "/read", "/stats"];
+// Signed-out pages that signed-in users skip: their library replaces them.
+const SIGNED_IN_REDIRECTS: Record<string, string> = { "/": "/library", "/try": "/library/new" };
 
 /**
  * Refreshes the auth session cookie on each request and sends signed-out
- * visitors away from private pages. Based on the @supabase/ssr Next.js guide.
+ * visitors away from private pages, and signed-in visitors away from the
+ * landing and try pages. Based on the @supabase/ssr Next.js guide.
  */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -36,6 +39,17 @@ export async function updateSession(request: NextRequest) {
     url.pathname = "/login";
     url.search = `?next=${encodeURIComponent(path)}`;
     return NextResponse.redirect(url);
+  }
+
+  const target = signedIn ? SIGNED_IN_REDIRECTS[path] : undefined;
+  if (target) {
+    const url = request.nextUrl.clone();
+    url.pathname = target;
+    url.search = "";
+    const redirect = NextResponse.redirect(url);
+    // Keep any refreshed session cookies set during getClaims().
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
   }
 
   return response;
