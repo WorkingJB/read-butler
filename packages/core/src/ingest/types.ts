@@ -20,3 +20,12 @@ export class UnsupportedFileError extends Error {
     this.name = "UnsupportedFileError";
   }
 }
+
+export class DrmProtectedError extends Error {
+  constructor() {
+    super(
+      "This EPUB is DRM-protected, so its text can't be read. Read Butler works with DRM-free EPUBs, such as Project Gutenberg books or titles a publisher sells without DRM.",
+    );
+    this.name = "DrmProtectedError";
+  }
+}

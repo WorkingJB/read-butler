@@ -1,6 +1,6 @@
 # Read Butler
 
-A free speed reader. Paste text or upload a PDF, EPUB, DOCX, TXT, Markdown or HTML file and read it one word at a time (RSVP), with a warm-up ramp and a target speed that adapts to how much you take in. Works on the web and as a Chrome extension side panel, with one synced library.
+A free speed reader. Paste text, upload a PDF, EPUB, DOCX, TXT, Markdown or HTML file, save web pages, or pick a free classic from Project Gutenberg, and read it one word at a time (RSVP), with a warm-up ramp and a target speed that adapts to how much you take in. Works on the web and as a Chrome extension side panel, with one synced library.
 
 - [Market analysis](docs/market-analysis.md): what already exists and where this fits.
 - [Architecture](docs/architecture.md): design decisions, data model, security, hosting and setup.
