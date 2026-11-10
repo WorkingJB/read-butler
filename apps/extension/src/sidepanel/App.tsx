@@ -30,11 +30,16 @@ export function App() {
     return () => data.subscription.unsubscribe();
   }, []);
 
+  // Reload on focus too: settings may have changed in the web app while the panel stayed open.
   useEffect(() => {
     if (!session) return;
-    getProfile(supabase)
-      .then((p) => p && setRamp(rampFromProfile(p)))
-      .catch(() => {});
+    const load = () =>
+      getProfile(supabase)
+        .then((p) => p && setRamp(rampFromProfile(p)))
+        .catch(() => {});
+    load();
+    window.addEventListener("focus", load);
+    return () => window.removeEventListener("focus", load);
   }, [session]);
 
   const openExtracted = useCallback((doc: ExtractedDocument, index = 0) => {
